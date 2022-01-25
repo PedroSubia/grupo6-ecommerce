@@ -2,6 +2,8 @@ import express from 'express';
 import colors from 'colors';
 import morgan from 'morgan';
 import config from './config/index.js';
+import routes from './routes/index.js';
+import { errorHandler, notFound } from './middlewares/errorMiddleware.js';
 
 //Created server
 const server = express();
@@ -29,7 +31,7 @@ server.use( (req, res, next) => {
 });
 
 // Use routers
-
+server.use(config.api.prefix, routes);
 // Upload folder
 
 // Front end production 
@@ -40,6 +42,8 @@ server.get(config.api.prefix, (req, res) => {
 });
 
 // Middlwares 
+server.use(notFound);
+server.use(errorHandler);
 
 // Export server 
 export default server;
