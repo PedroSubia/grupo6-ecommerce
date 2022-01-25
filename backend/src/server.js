@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import config from './config/index.js';
 import routes from './routes/index.js';
 import { errorHandler, notFound } from './middlewares/errorMiddleware.js';
+import connectDB from './config/db.js';
 
 //Created server
 const server = express();
@@ -16,8 +17,9 @@ if (config.nodeEnv === 'development'){
     server.use(morgan('dev'));
 }
 
-//DB Codnnection 
+//DB Connection 
 connectDB();
+
 // Config Headers 
 server.use( (req, res, next) => {
     // from where can I access
@@ -32,6 +34,7 @@ server.use( (req, res, next) => {
 
 // Use routers
 server.use(config.api.prefix, routes);
+
 // Upload folder
 
 // Front end production 
@@ -42,8 +45,8 @@ server.get(config.api.prefix, (req, res) => {
 });
 
 // Middlwares 
-server.use(notFound);
-server.use(errorHandler);
+server.use(notFound)
+server.use(errorHandler)
 
 // Export server 
 export default server;
