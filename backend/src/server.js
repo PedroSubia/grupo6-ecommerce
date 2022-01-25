@@ -16,8 +16,8 @@ if (config.nodeEnv === 'development'){
     server.use(morgan('dev'));
 }
 
-//DB Connection 
-
+//DB Codnnection 
+connectDB();
 // Config Headers 
 server.use( (req, res, next) => {
     // from where can I access
