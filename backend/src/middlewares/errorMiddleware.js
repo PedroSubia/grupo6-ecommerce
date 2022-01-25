@@ -1,18 +1,19 @@
-import config from "../config/index.js";
+import config from '../config/index.js'
 
+// Not found Error Handler
 const notFound = (req, res, next) => {
-    const error =  new Error(`Not Found - ${req.originalUrl}`);
+    const error = new Error(`Not Found -  ${req.originalUrl}`);
     res.status(404);
     next(error);
 };
 
-const errorHandler = (err, req, res , next) => {
-    const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+const errorHandler = (err,req, res, next) => {
+    const statusCode = res.statusCode === 200 ? 500 : res.statusCode; 
     res.status(statusCode);
-    res.json({
+    res.json( {
         message: err.message,
-        stack: config.nodeEnv === 'production' ? null : err.stack,
+        stack: config.nodeEnv === 'production' ? null: err.stack,
     });
 };
 
-export { notFound, errorHandler};
+export {notFound, errorHandler};
