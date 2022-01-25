@@ -60,10 +60,23 @@ export const getUsers = asyncHandler(async (req, res) => {
   res.status(200);
   res.json(users);
 });
-//get por id
-export const getUser = asyncHandler(async (req, res) => {
-  var user = await User.findById(req.params.id);
-  res.json(user);
+
+// ************* GET user usando token **************
+// @desc Get user profile
+// @route GET /api/users/profile
+// @access Private
+export const getUserProfile = asyncHandler(async (req, res) => {
+    //Usar findById
+    // Enviar un res.json({}) que contenga: _id, name, email, isAdmin
+    // En caso de error devolver status 404 y arrojar el error: 'User not found'
+    //console.log(req.user);
+    const userExists = await User.findById(req.user._id);
+    if(userExists){
+        res.json(userExists);
+    } else {
+        res.status(400);
+        throw new Error('User no found');
+    }    
 });
 
 //update por id
