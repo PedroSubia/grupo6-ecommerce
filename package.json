@@ -10,7 +10,7 @@
     "destroy": "node backend/seeder -d",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
-  "author": "Augusto Tolaba",
+  "author": "Pedro Elias Subia",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
