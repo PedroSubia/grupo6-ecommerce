@@ -78,42 +78,22 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 // route PUT /api/users/profile
 // @access Private 
 export const updateUserProfile = asyncHandler(async (req, res) => {
-    // Usar findById
-    // Asignar los valores que vienen de la req o del usuario encontrado ej: user.name = req.body.name || user.name 
+    // Usar findById    // Asignar los valores que vienen de la req o del usuario encontrado ej: user.name = req.body.name || user.name 
     // Si vienen el password en el req entonces asignarlo al user.password guardar el usuario actualizado con .save()
     // Enviar un res.json({}) que contenga: _id, name, email, isAdmin, token 
     // En caso de error devolver status 404 y arrojar el error: 'User not found'
     const userExists = await User.findById(req.user.id);
-    //const salt = await bcrypt.genSalt(10);
-    //const {name, email, password} = req.body;
     if (userExists) {
-        userExists.name = req.body.name || userExists.name;
-        userExists.email = req.body.email || userExists.email;
-        //userExists.password = await bcrypt.hash(req.body.password, salt);
-        userExists.password = req.body.password || userExists.password;
-        try {
-            //await User.updateOne({ _id: req.params.id }, userExists);
-            userExists.save();
-            //res.status(200)
-            // res.json({
-            // status: "1",
-            // msg: "User updated",
-            // });
-            res.status(200).json({
-                _id: userExists._id,
-                name: userExists.name,
-                email: userExists.email,
-                isAdmin: userExists.isAdmin,
-                //token: generateToken(user._id),
-              });            
-
-        } catch (error) {
-            res.status(404)
-            res.json({
-                status: "0",
-                msg: "Error processing operation.",
-            });
-        }   
+      userExists.name = req.body.name || userExists.name;
+      userExists.email = req.body.email || userExists.email;
+      userExists.password = req.body.password || userExists.password;
+      userExists.save();
+      res.status(200).json({
+          _id: userExists._id,
+          name: userExists.name,
+          email: userExists.email,
+          //password: userExists.password, // muestra la contraseña sin encriptar
+        });            
     } else {
         res.status(404);
         throw new Error("User not found");
@@ -122,7 +102,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 
 // ******************* GET USUARIOS ***********************
 // @desc Get all users
-// @oute PUT /api/users 
+// @oute GET /api/users 
 // @access Private/Admin 
 export const getUsers = asyncHandler(async (req, res) => {
     // User find 
@@ -189,12 +169,23 @@ export const updateUser = asyncHandler(async (req, res) => {
   // user.name = req.body.name || user.name;
   // user.email = req.body.email || user.email;
   // user.isAdmin = req.body.isAdmin || user.isAdmin;
-  // guardar con .save()
-  // Retornar un res.json({}) con contenga: _id, name, email, isAdmin
-  // Si no se encontro el usuario entonces retornar status 404 
-  // Y arrojar el error: 'User not found' 
+  // guardar con .save()  // Retornar un res.json({}) con contenga: _id, name, email, isAdmin
+  // Si no se encontro el usuario entonces retornar status 404  // Y arrojar el error: 'User not found' 
   const userExists = await User.findById(req.params.id);
   if (userExists){
+    userExists.name = req.body.name || userExists.name;
+    userExists.email = req.body.email || userExists.email;
+    userExists.isAdmin = req.body.isAdmin || userExists.isAdmin;
     
+    userExists.save();
+    res.status(200).json({
+      _id: userExists._id,
+      name: userExists.name,
+      email: userExists.email,
+      isAdmin: userExists.isAdmin,
+    }); 
+  } else {
+    res.status(404);
+    throw new Error('User not found');
   }
 });

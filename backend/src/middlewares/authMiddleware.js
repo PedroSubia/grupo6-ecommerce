@@ -31,24 +31,10 @@ export const admin = (async ( req, res, next) => {
     // Y arrojar el error: 'Not authorized as an admin' 
     console.log("Contenido del req.user en const admin: ", req.user._id);
     req.user = await User.findById(req.user._id);
-    // try {
-    //     if (req.user.isAdmin === true){
-    //         return next();
-    //     }         
-        
-    // } catch (error) {
-    //     res.status(401);
-    //     throw new Error('User no authorization, need user Admin');        
-    // }
     if (req.user.isAdmin === true){
         return next();
     } 
-    // else {
-    //     res.status(401);
-    //     throw new Error('User no authorization, need user Admin');
-    // }
-    if (req.user.isAdmin === false){
-        res.status(401);
-        throw new Error('User no authorization, need user Admin');
+    else {
+        return res.status(401).json({msg: 'User no authorization, need user Admin'});
     }
 });
