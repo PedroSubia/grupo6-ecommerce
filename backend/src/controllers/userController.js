@@ -87,7 +87,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
       userExists.name = req.body.name || userExists.name;
       userExists.email = req.body.email || userExists.email;
       userExists.password = req.body.password || userExists.password;
-      userExists.save();
+      await userExists.save();
       res.status(200).json({
           _id: userExists._id,
           name: userExists.name,
@@ -177,7 +177,7 @@ export const updateUser = asyncHandler(async (req, res) => {
     userExists.email = req.body.email || userExists.email;
     userExists.isAdmin = req.body.isAdmin || userExists.isAdmin;
     
-    userExists.save();
+    await userExists.save();
     res.status(200).json({
       _id: userExists._id,
       name: userExists.name,
