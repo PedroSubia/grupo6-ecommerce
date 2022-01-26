@@ -24,7 +24,7 @@ export const getProductById = asyncHandler(async (req, res) => {
     if (productExists) {
         res.json(productExists);
     } else {
-        res.status(400);
+        res.status(404);
         throw new Error('Product no found');
     }
 });
@@ -47,7 +47,7 @@ export const deleteProduct = asyncHandler(async (req, res) => {
 });
 
 export const createProduct = asyncHandler(async (req, res) => {
-    console.log("algo",req.user._id);
+    console.log("algo", req.user._id);
     const product = new Product({
         name: 'Prueba',
         price: 0,
@@ -68,115 +68,67 @@ export const updateProduct = asyncHandler(async (req, res) => {
     const productExists = await Product.findById(req.params.id);
 
     if (productExists) {
-        productExists.user = req.body.user || productExists.user;
         productExists.name = req.body.name || productExists.name;
         productExists.image = req.body.image || productExists.image;
         productExists.brand = req.body.brand || productExists.brand;
         productExists.category = req.body.category || productExists.category;
         productExists.description = req.body.description || productExists.description;
-        productExists.review = req.body.review || productExists.review;
-        productExists.rating = req.body.rating || productExists.rating;
-        productExists.numReviews = req.body.numReviews || productExists.numReviews;
         productExists.price = req.body.price || productExists.price;
         productExists.countInStock = req.body.countInStock || productExists.countInStock;
+        
+        await productExists.save();
+        res.status(200).json({
+            name: productExists.name,
+            image: productExists.image,
+            brand: productExists.brand,
+            category: productExists.category,
+            description: productExists.description,
+            price: productExists.price,
+            countInStock: productExists.countInStock,
+        });
 
-        // try {
-            productExists.save();
-            res.status(200).json({
-                user : productExists.user,
-                name : productExists.name,
-                image : productExists.image,
-                brand : productExists.brand,
-                category : productExists.category,
-                description : productExists.description,
-                review : productExists.review,
-                rating : productExists.rating,
-                numReviews : productExists.numReviews,
-                price : productExists.price,
-                countInStock : productExists.countInStock,
-            });
 
-        // } catch (error) {
-        //     res.status(404)
-        //     res.json({
-        //         status: "0",
-        //         msg: "Error processing operation.",
-        //     });
-        // }
     } else {
         res.status(404);
         throw new Error("Product not found");
     }
 });
 
-// export const createProductReview = asyncHandler(async (req, res) => {
-//     const { rating, comment } = req.body;
-//     const product = await Product.findById(req.params.id);
-//     console.log(rating);
-//     console.log(comment);
-//     if (product) {
-//         const alreadyReviewed = product.reviews.find(
-//             (r) => r.user.toString() === req.user._id.toString()
-//         );
-//         if (alreadyReviewed) {
-//             res.status(400);
-//             throw new Error('Product already reviewed');
-//         }
-//         const review = {
-//             name: "pru",
-//             rating: Number(rating),
-//             comment,
-//             user: "61f03c44366b66050cfd9130",
-
-//         };
-//         product.reviews.push(review);
-//         console.log(typeof product.reviews.get(0));
-//         product.numReviews = Object.keys(product.reviews).lenght;
-//         console.log(product.numReviews);
-//         product.rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.lenght;
-//         console.log(rating);
-//         await product.save();
-//         res.status(201).json({ message: 'Review added' });
-//     } else {
-//         res.status(404);
-//         throw new Error('Product not found');
-//     }
-// });
 
 export const createProductReview = asyncHandler(async (req, res) => {
     const { rating, comment } = req.body;
     const product = await Product.findById(req.params.id);
     if (product) {
-      const alreadyReviewed = product.reviews.find(
-        (r) => r.user.toString() === req.user._id.toString()
-      );
-      if (alreadyReviewed) {
-        res.status(400);
-        throw new Error('Product already reviewed');
-      }
-      const review = {
-        name: req.user.name,
-        rating: Number(rating),
-        comment,
-        user: req.user._id,
-      };
-      product.reviews.push(review);
-      product.numReviews = product.reviews.length;
-      product.rating =
-        product.reviews.reduce((acc, item) => item.rating + acc, 0) /
-        product.reviews.length;
-      await product.save();
-      res.status(201).json({ message: 'Review added' });
+        const alreadyReviewed = product.reviews.find(
+            (r) => r.user.toString() === req.user._id.toString()
+        );
+        if (alreadyReviewed) {
+            res.status(400);
+            throw new Error('Product already reviewed');
+        }
+        const review = {
+            name: req.user.name,
+            rating: Number(rating),
+            comment,
+            user: req.user._id,
+        };
+        product.reviews.push(review);
+        product.numReviews = product.reviews.length;
+        product.rating =
+            product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+            product.reviews.length;
+        await product.save();
+        res.status(201).json({ message: 'Review added' });
     } else {
-      res.status(404);
-      throw new Error('Product not found');
+        res.status(404);
+        throw new Error('Product not found');
     }
-  });
+});
 
 export const getTopProducts = asyncHandler(async (req, res) => {
     const products = await Product.find();
-    const product = products.sort(((a,b) => b.rating - a.rating)).slice(0,3);
-    
+    const product = products.sort(((a, b) => b.rating - a.rating)).slice(0, 3);
+
     if (products) {
         res.status(200).json(product);
     } else {
