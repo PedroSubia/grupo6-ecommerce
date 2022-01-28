@@ -8,6 +8,7 @@ const router = Router();
 
 router.use('/users', userRouter);
 router.use('/products', productRouter);
+router.use('/orders', orderRouter);
 router.use('/uploads', uploadRouter);
 router.use('/config/paypal', (req, res) => res.send(config.paypal));
 
