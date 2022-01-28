@@ -31,7 +31,7 @@ const orderSchema = mongoose.Schema(
         paymentMethod: {
             // Texto requerido 
             type: String,
-             required: true
+            required: true
         },
         paymentResult: {
             id: {type: String }, // id: Texto 

@@ -55,11 +55,8 @@ export const updateOrderToPaid = asyncHandler( async (req, res) => {
             update_time: req.body.update_time,
             email_address: req.body.payer.email_address,
         }
-        await orderExists.save();
-        res.status(200);
-        res.json(
-            orderExists
-        );
+        const orderSaved = await orderExists.save();
+        res.status(200).json(orderSaved);
     } else {
         res.status(404);
         throw new Error('Order not found');
@@ -74,11 +71,8 @@ export const updateOrderToDelivered = asyncHandler(async(req, res)=>{
     if (orderExists && ( req.user.isAdmin === true || orderExists.user._id === req.user.id) ){
         orderExists.isDelivered = true;
         orderExists.deliveredAt = Date.now();
-        await orderExists.save();
-        res.status(200);
-        res.json(
-            orderExists
-        );
+        const orderUpdated = await orderExists.save();
+        res.status(200).json(orderUpdated);
     } else {
         res.status(404);
         throw new Error('Order not found');
@@ -89,13 +83,13 @@ export const updateOrderToDelivered = asyncHandler(async(req, res)=>{
 // @route GET /api/orders/myorders
 // @access Private
 export const getMyOrders = asyncHandler(async(req,res) => {
-    let ordenes = await Order.find({user : req.user.id});
-    if (ordenes && ordenes.length>0){
+    let orders = await Order.find({user : req.user.id});
+    if (orders && orders.length>0){
         res.status(200);
-        res.json(ordenes);
+        res.json(orders);
     } else {
         res.status(200).json({
-            msg: 'Ud. no posee ordenes'
+            msg: 'User has not orders'
         });
     }
 });
@@ -106,6 +100,11 @@ export const getMyOrders = asyncHandler(async(req,res) => {
 export const getOrders = asyncHandler(async(req, res)=> {
     //let allOrders = await Order.find().populate( {path: 'user', select: 'id name'} );
     let allOrders = await Order.find().populate('user', 'id name');
-    res.status(200);
-    res.json(allOrders);
+    
+    if(allOrders){
+        res.status(200).json(allOrders);
+    }else{
+        res.status(404);
+        throw new Error('Orders not found');
+    }
 });
