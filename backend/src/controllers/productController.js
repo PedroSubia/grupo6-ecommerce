@@ -1,6 +1,5 @@
 import asyncHandler from "express-async-handler";
 import Product from "../models/productModel.js";
-import User from "../models/userModel.js";
 
 export const getProducts = asyncHandler(async (req, res) => {
     const pageSize = 10
@@ -31,13 +30,15 @@ export const getProductById = asyncHandler(async (req, res) => {
 
 export const deleteProduct = asyncHandler(async (req, res) => {
 
+    console.log("ID ", req.params.id);
     const product = await Product.findById(req.params.id);
-
+    console.log("PRODUCTO ", product);
     if (product) {
-        await Product.remove(product);
+        const removedProdcut = await Product.deleteOne(product._id);
+        console.log("Producto eliminado",removedProdcut);
         res.status(200);
         res.json({
-            status: "200",
+            status: "1",
             msg: "Product Removed",
         });
     } else {
@@ -47,14 +48,13 @@ export const deleteProduct = asyncHandler(async (req, res) => {
 });
 
 export const createProduct = asyncHandler(async (req, res) => {
-    console.log("algo", req.user._id);
     const product = new Product({
-        name: 'Prueba',
+        name: 'Producto 10',
         price: 0,
         user: req.user._id,
-        image: '/images/producto0.jpg',
-        brand: 'Producto 0',
-        category: 'Pruebas',
+        image: '/images/producto10.jpg',
+        brand: 'Brand 10',
+        category: 'Pruebas 10',
         countInStock: 0,
         numReviews: 0,
         description: 'Producto de prueba'
@@ -126,11 +126,12 @@ export const createProductReview = asyncHandler(async (req, res) => {
 });
 
 export const getTopProducts = asyncHandler(async (req, res) => {
-    const products = await Product.find();
-    const product = products.sort(((a, b) => b.rating - a.rating)).slice(0, 3);
+    const products = await Product.find().sort({'rating':'desc'}).limit(3);
+    //const products = await Product.find();
+    //const product = products.sort(((a, b) => b.rating - a.rating)).slice(0, 3);
 
     if (products) {
-        res.status(200).json(product);
+        res.status(200).json(products);
     } else {
         res.status(404);
         throw new Error('0 products founded');
