@@ -60,7 +60,9 @@ const orderSchema = mongoose.Schema(
             default: false,
         },
         piadAt: {
-            value: Date.now() // Fecha
+            //value: Date.now() // Fecha
+            type: Date,
+            required: false
         },
         isDelivered: {
             type: Boolean, // Boolean, requerido // Default false 
@@ -68,7 +70,9 @@ const orderSchema = mongoose.Schema(
             default: false,            
         },
         deliveredAt: {
-            value: Date.now() // Fecha
+            //value: Date.now() // Fecha
+            type: Date,
+            required: false
         },
     },
     {
