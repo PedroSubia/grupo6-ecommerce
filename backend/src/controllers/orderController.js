@@ -54,7 +54,7 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
     orderExists &&
     (req.user.isAdmin === true || orderExists.user._id === req.user.id)
   ) {
-    orderExists.isPaid === true;
+    orderExists.isPaid = true;
     orderExists.paidAt = Date.now();
     orderExists.paymentResult = {
       id: req.body.id,
