@@ -5,6 +5,7 @@ import config from './config/index.js';
 import routes from './routes/index.js';
 import { errorHandler, notFound } from './middlewares/errorMiddleware.js';
 import connectDB from './config/db.js';
+import path from 'path';
 
 //Created server
 const server = express();
@@ -13,7 +14,7 @@ const server = express();
 server.use(express.json());
 
 // Logger 
-if (config.nodeEnv === 'development'){
+if (config.nodeEnv === 'development') {
     server.use(morgan('dev'));
 }
 
@@ -21,7 +22,7 @@ if (config.nodeEnv === 'development'){
 connectDB();
 
 // Config Headers 
-server.use( (req, res, next) => {
+server.use((req, res, next) => {
     // from where can I access
     res.header('Access-Control-Allow-Origin', '*');
     // type of headers 
@@ -36,7 +37,8 @@ server.use( (req, res, next) => {
 server.use(config.api.prefix, routes);
 
 // Upload folder
-
+const _dirname = path.resolve();
+server.use('/uploads', express.static(path.join(_dirname, '/uploads')))
 // Front end production 
 
 // Api status
