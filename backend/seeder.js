@@ -15,8 +15,9 @@ const importData = async () => {
         await Order.deleteMany();
         await Product.deleteMany();
         await User.deleteMany();
-
+        console.log("Users", users);
         const createdUsers = await User.insertMany(users);
+        console.log();
         const adminUser = createdUsers[0]._id;
         const sampleProducts = products.map( (product) => {
             return { ...product, user: adminUser };
@@ -38,6 +39,16 @@ const destroyData = async () => {
     // Lanzar process.exit() 
     // Si surge un error mostrar log del error 
     // Y lanzar process.exit(1)
+    try {
+        await Order.deleteMany();
+        await Product.deleteMany();
+        await User.deleteMany();
+        console.log('Data destroyed!'.green.inverse);
+        process.exit();
+    } catch (error) {
+        console.error(`${error}`.red.inverse);
+        process.exit(1);        
+    }
 }; 
 
 if (process.argv[2] === '-d'){

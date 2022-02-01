@@ -29,7 +29,7 @@ export const authUser = asyncHandler(async (req, res) => {
 // @desc Register a new uer
 // @route POST /api/users
 // @access Public
-export const registerUser = asyncHandler(async (req, res) => {
+export const registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password } = req.body;
   const useExists = await User.findOne({ email });
   if (useExists) {
@@ -42,13 +42,21 @@ export const registerUser = asyncHandler(async (req, res) => {
     password,
   });
   if (user) {
-    res.status(201).json({
+    // res.status(201).json({
+    //   _id: user._id,
+    //   name: user.name,
+    //   email: user.email,
+    //   isAdmin: user.isAdmin,
+    //   token: generateToken(user._id),
+    // });
+    req.newUser = {
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
       token: generateToken(user._id),
-    });
+    }
+    return next();
   } else {
     res.status(400);
     throw new Error("Invalid user data");
@@ -60,17 +68,17 @@ export const registerUser = asyncHandler(async (req, res) => {
 // @route GET /api/users/profile
 // @access Private
 export const getUserProfile = asyncHandler(async (req, res) => {
-    //Usar findById
-    // Enviar un res.json({}) que contenga: _id, name, email, isAdmin
-    // En caso de error devolver status 404 y arrojar el error: 'User not found'
-    //console.log(req.user);
-    const userExists = await User.findById(req.user._id);
-    if(userExists){
-        res.json(userExists);
-    } else {
-        res.status(400);
-        throw new Error('User no found');
-    }    
+  //Usar findById
+  // Enviar un res.json({}) que contenga: _id, name, email, isAdmin
+  // En caso de error devolver status 404 y arrojar el error: 'User not found'
+  //console.log(req.user);
+  const userExists = await User.findById(req.user._id);
+  if (userExists) {
+    res.json(userExists);
+  } else {
+    res.status(400);
+    throw new Error('User no found');
+  }
 });
 
 // ************** update por id ****************
@@ -78,26 +86,26 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 // route PUT /api/users/profile
 // @access Private 
 export const updateUserProfile = asyncHandler(async (req, res) => {
-    // Usar findById    // Asignar los valores que vienen de la req o del usuario encontrado ej: user.name = req.body.name || user.name 
-    // Si vienen el password en el req entonces asignarlo al user.password guardar el usuario actualizado con .save()
-    // Enviar un res.json({}) que contenga: _id, name, email, isAdmin, token 
-    // En caso de error devolver status 404 y arrojar el error: 'User not found'
-    const userExists = await User.findById(req.user.id);
-    if (userExists) {
-      userExists.name = req.body.name || userExists.name;
-      userExists.email = req.body.email || userExists.email;
-      userExists.password = req.body.password || userExists.password;
-      await userExists.save();
-      res.status(200).json({
-          _id: userExists._id,
-          name: userExists.name,
-          email: userExists.email,
-          //password: userExists.password, // muestra la contraseña sin encriptar
-        });            
-    } else {
-        res.status(404);
-        throw new Error("User not found");
-    }
+  // Usar findById    // Asignar los valores que vienen de la req o del usuario encontrado ej: user.name = req.body.name || user.name 
+  // Si vienen el password en el req entonces asignarlo al user.password guardar el usuario actualizado con .save()
+  // Enviar un res.json({}) que contenga: _id, name, email, isAdmin, token 
+  // En caso de error devolver status 404 y arrojar el error: 'User not found'
+  const userExists = await User.findById(req.user.id);
+  if (userExists) {
+    userExists.name = req.body.name || userExists.name;
+    userExists.email = req.body.email || userExists.email;
+    userExists.password = req.body.password || userExists.password;
+    await userExists.save();
+    res.status(200).json({
+      _id: userExists._id,
+      name: userExists.name,
+      email: userExists.email,
+      //password: userExists.password, // muestra la contraseña sin encriptar
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
 });
 
 // ******************* GET USUARIOS ***********************
@@ -105,18 +113,18 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 // @oute GET /api/users 
 // @access Private/Admin 
 export const getUsers = asyncHandler(async (req, res) => {
-    // User find 
-    // Enviar un res.json() con el resultado  
-    var users = await User.find();
-    res.status(200);
-    res.json(users);
-  }); 
+  // User find 
+  // Enviar un res.json() con el resultado  
+  var users = await User.find();
+  res.status(200);
+  res.json(users);
+});
 
 // *************** DELETE USERS *******************
 // @desc Delete user 
 // @route DELETE /api/users/:id
 // @access Private/Admin
-export const deleteUser = asyncHandler(async(req, res) => {
+export const deleteUser = asyncHandler(async (req, res) => {
   // User findById
   // Se se encontro el usuario usar .remove()
   // Retornar un res.json({}) con el message: 'User Removed' 
@@ -133,7 +141,7 @@ export const deleteUser = asyncHandler(async(req, res) => {
   } else {
     res.status(404);
     throw new Error("User not found");
-  }  
+  }
 });
 
 // *************** GET USERS BY ID *******************
@@ -172,18 +180,18 @@ export const updateUser = asyncHandler(async (req, res) => {
   // guardar con .save()  // Retornar un res.json({}) con contenga: _id, name, email, isAdmin
   // Si no se encontro el usuario entonces retornar status 404  // Y arrojar el error: 'User not found' 
   const userExists = await User.findById(req.params.id);
-  if (userExists){
+  if (userExists) {
     userExists.name = req.body.name || userExists.name;
     userExists.email = req.body.email || userExists.email;
     userExists.isAdmin = req.body.isAdmin || userExists.isAdmin;
-    
+
     await userExists.save();
     res.status(200).json({
       _id: userExists._id,
       name: userExists.name,
       email: userExists.email,
       isAdmin: userExists.isAdmin,
-    }); 
+    });
   } else {
     res.status(404);
     throw new Error('User not found');
