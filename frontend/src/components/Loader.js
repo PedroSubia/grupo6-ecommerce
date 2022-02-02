@@ -2,18 +2,18 @@ import React from 'react';
 import { Spinner } from 'react-bootstrap';
 
 const Loader = () => {
-    return(
+    return (
         <Spinner 
-        animation= 'border'
-        role = 'status'
-        variant = 'warning'
-        style = {{
-            width: '100px',
-            height: '100px',
-            margin: 'auto',
-            display: 'block',
-        }}>
-        <span className="sr-only">Cargando...</span>
+            animation='border' 
+            role='status' 
+            variant='warning' 
+            style={{
+                width: '100px',
+                height: '100px',
+                margin: 'auto',
+                display: 'block',
+            }}>
+            <span className='sr-only'>Cargando...</span>
         </Spinner>
     );
 };

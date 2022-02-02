@@ -1,28 +1,55 @@
-import React from "react";
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import React, { useEffect } from 'react';
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../redux/actions/userActions'
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-  return (
+  const dispatch = useDispatch();
+  const navigation = useNavigate();
+
+  const { loading, user } = useSelector( (state) => state.userReducer);
+  //console.log('user recibido en component header:', user);
+  
+  const cerrarSesion = () => {
+    dispatch(logoutUser());
+  }
+
+  return ( 
     <header>
       <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
         <Container>
           <LinkContainer to='/'>
-            <Navbar.Brand>Tienda Virtual</Navbar.Brand>
+            <Navbar.Brand>TiendaVirtual</Navbar.Brand>
           </LinkContainer>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Toggle aria-controls='basic-navbar-nav'/>
           <Navbar.Collapse id='basic-navbar-nav'>
-            <Nav className="ms-auto">
+            <Nav className='ms-auto'>
               <LinkContainer to='/cart'>
                 <Nav.Link>
-                  <i className="fas fa-shopping-cart"></i>Carrito
+                  <i className='fas fa-shopping-cart'></i>Carrito
                 </Nav.Link>
               </LinkContainer>
+              {user && user?.name ?               
+              <LinkContainer to='/'>
+                <NavDropdown title={user?.name} id='basic-nav-dropdown'>
+                  <NavDropdown.Item href='/profileUser'>Perfil</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={ () => cerrarSesion()}>Cerrar Sesion</NavDropdown.Item>
+                </NavDropdown>
+                {/* <Nav.Link>
+                  <i className='fas fa-user'></i>{user.name}
+                </Nav.Link> */}
+              </LinkContainer> 
+              : 
               <LinkContainer to='/login'>
                 <Nav.Link>
-                  <i className="fas fa-user"></i> Login
+                  <i className='fas fa-user'></i>Login 
                 </Nav.Link>
               </LinkContainer>
+              }
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -32,5 +59,3 @@ const Header = () => {
 };
 
 export default Header;
-
-
