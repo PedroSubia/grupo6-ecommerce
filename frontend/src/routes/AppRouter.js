@@ -5,7 +5,8 @@ import HomePage from "../pages/HomePage";
 import { Container } from "react-bootstrap";
 import ProductSelected from "../pages/ProductSelected";
 import Login from '../pages/LoginPage';
-import Register from '../pages/RegisterPage'
+import Register from '../pages/RegisterPage';
+import Products from '../pages/ProductsPage';
 
 const AppRouter = () => {
     return (
@@ -18,6 +19,7 @@ const AppRouter = () => {
                         <Route path='/login' element={<Login />} />
                         <Route path='/register' element={<Register />} />
                         <Route path='/product/:id' element={<ProductSelected />} />
+                        <Route path='/admin/products/' element={<Products/>} />
                     </Routes>
                 </Container>
             </main>

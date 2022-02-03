@@ -19,7 +19,7 @@ const LoginPages = () => {
         }
         dispatch(loginActions(initialUserState));
     };
-    const { loading, user } = useSelector( (state) => state.userReducer);
+    const { user } = useSelector( (state) => state.userReducer);
     //console.log('user recibido en login page: ', user);
 
     useEffect(() => {

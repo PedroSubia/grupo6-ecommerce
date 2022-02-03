@@ -4,7 +4,6 @@ import Button from "react-bootstrap/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../redux/actions/userActions";
 import { useNavigate } from "react-router-dom";
-import Message from "../components/Message";
 import Loader from "../components/Loader";
 
 const RegisterPage = () => {

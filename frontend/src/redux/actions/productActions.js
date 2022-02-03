@@ -1,5 +1,6 @@
 import actionTypes from './actionTypes';
-import { getProducts, getProductById } from '../../services/productServices';
+import { getProducts, getProductById , deleteProduct1 } from '../../services/productServices';
+import { logoutUser } from './userActions';
 
 export const listProducts = (keyword = '', pageNumber = '') => {
     return async (dispatch) => {
@@ -20,6 +21,33 @@ export const listProducts = (keyword = '', pageNumber = '') => {
         }
     };
 };
+
+export const deleteProduct = (id,token) => {
+    return async (dispatch, getState) => {
+      try {
+        dispatch({
+          type: actionTypes.PRODUCT_DELETE_REQUEST,
+        });
+        
+        await deleteProduct1(id, token);
+        dispatch({
+          type: actionTypes.PRODUCT_DELETE_SUCCESS,
+        });
+      } catch (error) {
+        const message =
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message;
+        if (message === 'Not authorized, token failed') {
+          dispatch(logoutUser());
+        }
+        dispatch({
+          type: actionTypes.PRODUCT_DELETE_FAIL,
+          payload: message,
+        });
+      }
+    };
+  };
 
 export const listProductsDetails = (id) => {
     return async (dispatch) => {

@@ -20,3 +20,21 @@ export const getProductById = async (id) => {
         throw error;
     }
 };
+
+
+export const deleteProduct1 = async (id, token) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const { data } = await axios.delete(
+        `${BASE_URL_BACK}/products/${id}`,
+        config
+      );
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  };

@@ -4,8 +4,6 @@ import {
     Button,
     Card,
     Col,
-    Form,
-    FormSelect,
     Image,
     ListGroup,
     Row,
@@ -13,8 +11,7 @@ import {
 import { listProductsDetails } from '../redux/actions/productActions';
 import Message from '../components/Message';
 import Loader from '../components/Loader'
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import Meta from '../components/Meta';
+import { Link, useParams } from 'react-router-dom';
 
 const ProductSelected = () => {
     const dispatch = useDispatch();
