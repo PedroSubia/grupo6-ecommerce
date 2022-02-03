@@ -7,6 +7,7 @@ import ProductSelected from "../pages/ProductSelected";
 import Login from '../pages/LoginPage';
 import Register from '../pages/RegisterPage';
 import Products from '../pages/ProductsPage';
+//import ProductCreate from '../pages/createProductPage';
 
 const AppRouter = () => {
     return (
@@ -20,6 +21,7 @@ const AppRouter = () => {
                         <Route path='/register' element={<Register />} />
                         <Route path='/product/:id' element={<ProductSelected />} />
                         <Route path='/admin/products/' element={<Products/>} />
+                        {/* <Route path='/product/create' element= {<ProductCreate/>} /> */}
                     </Routes>
                 </Container>
             </main>

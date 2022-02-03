@@ -6,10 +6,11 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { deleteProduct, listProducts } from '../redux/actions/productActions';
 import Paginate from '../components/Paginate';
+//import { useNavigate } from 'react-router-dom';
 
 const ProductListPage = () => {
     const params = useParams();
-
+    const navigation = useNavigate();
     const pageNumber = params.pageNumber || 1;
 
     const productList = useSelector((state) => state.productList);
@@ -21,6 +22,9 @@ const ProductListPage = () => {
         success: successDelete,
     } = productDelete;
 
+    // const crearProducto = () => {
+    //     navigation('/product/create');
+    //   }
     const userLogin = useSelector((state) => state.userReducer);
     const { user } = userLogin;
     const dispatch = useDispatch();
