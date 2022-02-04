@@ -37,8 +37,8 @@ server.use((req, res, next) => {
 server.use(config.api.prefix, routes);
 
 // Upload folder
-const _dirname = path.resolve();
-server.use('/uploads', express.static(path.join(_dirname, '/uploads')))
+const __dirname = path.resolve();
+server.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 // Front end production 
 
 // // Api status
