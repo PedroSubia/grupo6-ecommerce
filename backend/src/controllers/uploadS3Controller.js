@@ -24,7 +24,7 @@ export const uploadsConfigs3 = multer({
         bucket: process.env.BUCKET,
         acl: 'public-read',
         key: function (req, file, cb) {
-            cb(null, path.basename(file.originalname, path.extname(file.originalname)) + '-' + Date.now() + path.extname(file.originalname))
+            cb(null, path.basename('image', path.extname(file.originalname)) + '-' + Date.now() + path.extname(file.originalname))
         }
     }),
     limits: { fileSize: 10000000 }, // In bytes: 10000000 bytes = 10 MB
