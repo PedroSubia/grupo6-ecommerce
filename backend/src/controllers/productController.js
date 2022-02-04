@@ -35,7 +35,7 @@ export const deleteProduct = asyncHandler(async (req, res) => {
     console.log("PRODUCTO ", product);
     if (product) {
         const removedProdcut = await Product.deleteOne(product);
-        console.log("Producto eliminado",removedProdcut);
+        console.log("Producto eliminado", removedProdcut);
         res.status(200);
         res.json({
             status: "1",
@@ -48,18 +48,8 @@ export const deleteProduct = asyncHandler(async (req, res) => {
 });
 
 export const createProduct = asyncHandler(async (req, res) => {
-    const product = new Product({
-        name: 'Producto 10',
-        price: 0,
-        user: req.user._id,
-        image: '/images/producto10.jpg',
-        brand: 'Brand 10',
-        category: 'Pruebas 10',
-        countInStock: 0,
-        numReviews: 0,
-        description: 'Producto de prueba'
-    });
-    const createProduct = await product.save();
+    const product = req.body;
+    const createProduct = await Product.create(product);
     res.status(201).json(createProduct);
 });
 
@@ -75,7 +65,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
         productExists.description = req.body.description || productExists.description;
         productExists.price = req.body.price || productExists.price;
         productExists.countInStock = req.body.countInStock || productExists.countInStock;
-        
+
         await productExists.save();
         res.status(200).json({
             name: productExists.name,
@@ -126,7 +116,7 @@ export const createProductReview = asyncHandler(async (req, res) => {
 });
 
 export const getTopProducts = asyncHandler(async (req, res) => {
-    const products = await Product.find().sort({'rating':'desc'}).limit(3);
+    const products = await Product.find().sort({ 'rating': 'desc' }).limit(3);
     //const products = await Product.find();
     //const product = products.sort(((a, b) => b.rating - a.rating)).slice(0, 3);
 

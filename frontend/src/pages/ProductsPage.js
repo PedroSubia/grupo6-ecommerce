@@ -10,7 +10,6 @@ import Paginate from '../components/Paginate';
 
 const ProductListPage = () => {
     const params = useParams();
-    const navigation = useNavigate();
     const pageNumber = params.pageNumber || 1;
 
     const productList = useSelector((state) => state.productList);
@@ -46,10 +45,13 @@ const ProductListPage = () => {
 
     const deleteHandler = (productId) => {
         if (window.confirm('¿Está seguro de eliminar este producto?')) {
-            dispatch(deleteProduct(productId,user.token));
+            dispatch(deleteProduct(productId, user.token));
         }
     };
 
+    const createProduct = () => {
+        navigate('/product/create');
+    };
 
     return (
         <>
@@ -58,7 +60,7 @@ const ProductListPage = () => {
                     <h1>Productos</h1>
                 </Col>
                 <Col className='d-flex justify-content-end'>
-                    <Button className='my-3'>
+                    <Button className='my-3' onClick={() => createProduct()}>
                         <i className='fas fa-plus'></i> Crear Producto
                     </Button>
                 </Col>
