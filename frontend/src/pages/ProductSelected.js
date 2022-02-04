@@ -97,7 +97,7 @@ const ProductSelected = () => {
                                             <Row>
                                                 <Col>Cantidad:</Col>
                                                 <Col>
-                                                    <Form.Select value={qty} onChange={(e)=>setQty(e.target.value)}>
+                                                    <Form.Select value={qty} onChange={(e) => setQty(e.target.value)}>
                                                         {maxStock.map((element) => (
                                                             <option key={element} value={element}>{element}</option>
                                                         ))}

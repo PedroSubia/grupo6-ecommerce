@@ -3,9 +3,9 @@ import { BASE_URL_BACK } from '../config';
 
 export const loginServices = async ( dataLogin ) => {
     try {
-        const config = {
-            headers: {'Content-Type': 'application/json'},            
-        }
+        // const config = {
+        //     headers: {'Content-Type': 'application/json'},            
+        // }
         //console.log( dataLogin );
         //const { data } = await axios.post(`${ BASE_URL_BACK}/users/login`, config, { dataLogin });
         const { data } = await axios.post(`${ BASE_URL_BACK}/users/login`, dataLogin);

@@ -1,13 +1,15 @@
 import { combineReducers } from "redux";
-import { productDetailsReducer, productListReducer } from "./productReducers";
+import { productDetailsReducer, productListReducer, productDeleteReducer, productCreateReducer } from "./productReducers";
 import { loginReducer, registerReducer } from "./userReducers";
 import { myCart } from "./cartReducer";
 
 const reducer = combineReducers({
     productList: productListReducer,
-    productDetails : productDetailsReducer,
+    productDetails: productDetailsReducer,
     userReducer: loginReducer || registerReducer,
-    cartReducer : myCart,
+    cartReducer: myCart,
+    productDelete: productDeleteReducer,
+    newProduct: productCreateReducer,
 
 });
 
