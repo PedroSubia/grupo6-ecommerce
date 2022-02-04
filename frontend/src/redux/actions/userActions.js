@@ -39,7 +39,7 @@ export const registerUser = ( newUser ) => {
                 type: actionTypes.LOGIN_SUCCESS,
                 payload: data,
             });
-
+            localStorage.setItem('user', JSON.stringify(data));
         } catch (error) {
             dispatch({ 
                 type: actionTypes.REGISTER_USER_FAIL,

@@ -31,10 +31,10 @@ export const registerReducer = ( state= { userNew:{} }, action) => {
             };
         case actionTypes.REGISTER_USER_FAIL:
             return { loading: false, error: action.payload };   
-        case actionTypes.USER_LOGOUT:
-            return {
-                userNew:{}
-            } 
+        // case actionTypes.USER_LOGOUT:
+        //     return {
+        //         userNew:{}
+        //     } 
         default:
             return state;
     }

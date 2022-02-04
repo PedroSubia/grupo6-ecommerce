@@ -24,10 +24,10 @@ export const listProducts = (keyword = '', pageNumber = '') => {
 export const listProductsDetails = (id) => {
     return async (dispatch) => {
         try {
-            console.log("Product details: ");
             dispatch({ type: actionTypes.PRODUCT_DETAILS_REQUEST });
             const data = await getProductById(id);
-            console.log("data: ", data);
+            //console.log("Product details: ");
+            //console.log("data: ", data);
             dispatch({
                 type: actionTypes.PRODUCT_DETAILS_SUCCESS,
                 payload: data,
