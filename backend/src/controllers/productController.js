@@ -34,7 +34,7 @@ export const deleteProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id);
     console.log("PRODUCTO ", product);
     if (product) {
-        const removedProdcut = await Product.deleteOne(product._id);
+        const removedProdcut = await Product.deleteOne(product);
         console.log("Producto eliminado",removedProdcut);
         res.status(200);
         res.json({
